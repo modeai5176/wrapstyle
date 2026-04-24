@@ -1,26 +1,40 @@
 @import "tailwindcss";
 
+/* 🌿 Root Theme Variables */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* 🎨 Core Palette */
+  --background: #F8F7F4;         /* Ivory */
+  --foreground: #2a2a2a;         /* Primary text */
+
+  --color-ivory: #F8F7F4;
+  --color-sage: #9FB7A7;
+  --color-forest: #3F5F52;
+
+  /* 🎯 Supporting Shades */
+  --color-forest-dark: #2f4a40;
+  --color-sage-light: #c7d6cd;
+
+  /* 🖤 Text System */
+  --text-primary: #2a2a2a;
+  --text-muted: #6f7d75;
+
+  /* 🧊 UI Elements */
+  --border-color: #e5e7eb;
+  --surface: #ffffff;
+
+  /* 🌫 Shadow */
+  --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
+/* 🔌 Tailwind Theme Mapping */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  --color-ivory: var(--color-ivory);
+  --color-sage: var(--color-sage);
+  --color-forest: var(--color-forest);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }

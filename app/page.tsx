@@ -3,6 +3,10 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ServicesSection from "@/components/Services";
+import RelationshipSection from "@/components/RelationshipSection";
+import CustomHamperSection from "@/components/CustomHamperSection";
 
 type MegaColumn = { heading: string; links: string[] };
 type NavItem = { label: string; columns: MegaColumn[] };
@@ -100,10 +104,59 @@ const faqData = [
     answer: "Yes. We offer tiered bulk-ordering tailored for corporate gifting calendars, multi-event weddings and year-round retail programmes."
   }
 ];
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+const PRODUCTS = [
+  {
+    name: "Luxury Celebration Hamper",
+    price: "₹2,499",
+    img: "/images/gift_hamper_1.jpg",
+  },
+  {
+    name: "Minimalist Gift Box",
+    price: "₹1,599",
+    img: "/images/gift_hamper_2.jpg",
+  },
+  {
+    name: "Premium Wedding Hamper",
+    price: "₹3,299",
+    img: "/images/gift_hamper_3.jpg",
+  },
+  {
+    name: "Festive Delight Box",
+    price: "₹1,999",
+    oldPrice: "₹2,499",
+    img: "/images/gift_hamper_4.jpg",
+    sale: true,
+  },
+];
+
+const PRODUCTS_CUSTOM = [
+  {
+    name: "Luxury Celebration Hamper",
+    price: "₹2,499",
+    img: "/images/personal_custom_hamper.jpg",
+  },
+  {
+    name: "Minimalist Gift Box",
+    price: "₹1,599",
+    img: "/images/personal_custom_hamper_2.jpg",
+  },
+  {
+    name: "Premium Wedding Hamper",
+    price: "₹3,299",
+    img: "/images/personal_custom_hamper_3.jpg",
+  },
+  {
+    name: "Festive Delight Box",
+    price: "₹1,999",
+    oldPrice: "₹2,499",
+    img: "/images/personal_custom_hamper_4.jpg",
+    sale: true,
+  },
+];
 
 gsap.registerPlugin(ScrollTrigger);
+
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [openMenu, setOpenMenu] = useState<number | null>(null);
@@ -317,16 +370,16 @@ export default function Home() {
   }, []);
 
   return (
-    <div ref={rootRef} className="flex flex-col flex-1 bg-mint-50 font-sans text-mint-900 relative overflow-x-hidden">
+    <div ref={rootRef} className="flex flex-col flex-1 bg-background font-sans text-mint-900 relative overflow-x-hidden">
       {/* Navbar with mega menu */}
       <header className="relative z-50" onMouseLeave={handleMenuLeave}>
-        <nav className="flex justify-between items-center py-7 px-14 text-sm font-semibold tracking-wider bg-mint-50">
+        <nav className="bg-forest flex justify-between items-center py-7 px-14 text-sm font-semibold tracking-wider">
           {/* Logo */}
           <div className="flex items-center gap-3 shrink-0">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L12 22M2 12L22 12M6 6L18 18M18 6L6 18" stroke="#0e3a2c" strokeWidth="2.5" strokeLinecap="square" />
+              <path d="M12 2L12 22M2 12L22 12M6 6L18 18M18 6L6 18" stroke="#F8F7F4" strokeWidth="2.5" strokeLinecap="square" />
             </svg>
-            <span className="text-xl font-bold tracking-tight uppercase text-mint-900">WRAPSTYLE</span>
+            <span className="text-xl font-semibold tracking-tight uppercase text-ivory">WRAPSTYLE</span>
           </div>
 
           {/* Primary nav links */}
@@ -341,7 +394,7 @@ export default function Home() {
                 >
                   <a
                     href="#"
-                    className={`relative py-2 transition-colors ${active ? "text-mint-900" : "hover:text-mint-600"}`}
+                    className={`relative py-2 transition-colors text-ivory ${active ? "text-ivory" : "hover:text-ivory"}`}
                   >
                     {item.label}
                     <span
@@ -356,19 +409,19 @@ export default function Home() {
           {/* Right icons */}
           <div className="flex items-center gap-6 text-mint-800 shrink-0">
             <button aria-label="Account" className="hover:text-mint-600 transition-colors">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F8F7F4" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="8" r="4" />
                 <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" />
               </svg>
             </button>
             <button aria-label="Search" className="hover:text-mint-600 transition-colors">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F8F7F4" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="11" cy="11" r="7" />
                 <path d="m20 20-3.5-3.5" />
               </svg>
             </button>
             <button aria-label="Cart" className="hover:text-mint-600 transition-colors">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F8F7F4" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M6 7h12l-1.2 11.4a2 2 0 0 1-2 1.6H9.2a2 2 0 0 1-2-1.6L6 7Z" />
                 <path d="M9 7V5a3 3 0 0 1 6 0v2" />
               </svg>
@@ -379,7 +432,7 @@ export default function Home() {
         {/* Mega menu panel */}
         <div
           onMouseEnter={() => openMenu !== null && handleMenuEnter(openMenu)}
-          className={`absolute left-0 right-0 top-full bg-mint-50 border-t border-mint-200/70 shadow-[0_24px_40px_-24px_rgba(14,58,44,0.25)] transition-all duration-300 ease-out ${
+          className={`absolute left-0 right-0 top-full bg-ivory border-t border-mint-200/70 shadow-[0_24px_40px_-24px_rgba(14,58,44,0.25)] transition-all duration-300 ease-out ${
             openMenu !== null ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-2 pointer-events-none"
           }`}
         >
@@ -387,7 +440,7 @@ export default function Home() {
             {openMenu !== null &&
               navData[openMenu].columns.map((col) => (
                 <div key={col.heading} className="flex flex-col">
-                  <h4 className="text-[11px] font-semibold tracking-[0.2em] uppercase text-mint-900 mb-5">
+                  <h4 className="text-[11px] font-semibold tracking-[0.2em] uppercase text-forest mb-5">
                     {col.heading}
                   </h4>
                   <ul className="flex flex-col gap-3">
@@ -395,7 +448,7 @@ export default function Home() {
                       <li key={link}>
                         <a
                           href="#"
-                          className="text-sm text-mint-800/80 hover:text-mint-600 transition-colors normal-case"
+                          className="text-sm text-foreground transition-colors normal-case"
                         >
                           {link}
                         </a>
@@ -432,7 +485,7 @@ export default function Home() {
 
         {/* UP (Bottom 3 Cards) - offset between the top cards */}
         <div className="up-card absolute w-[11vw] h-[14vw] top-[46%] left-[17.5%] rounded-xl overflow-hidden shadow-[0_18px_40px_-20px_rgba(14,58,44,0.35)]">
-          <Image src="https://images.unsplash.com/photo-1543661840-754854bfdbfc?q=80&w=600" alt="" fill className="object-cover" />
+          <Image src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=600" alt="" fill className="object-cover" />
         </div>
 
         <div className="up-card absolute w-[11vw] h-[14vw] top-[46%] left-[44.5%] rounded-xl overflow-hidden shadow-[0_18px_40px_-20px_rgba(14,58,44,0.35)]">
@@ -440,27 +493,27 @@ export default function Home() {
         </div>
 
         <div className="up-card absolute w-[11vw] h-[14vw] top-[46%] right-[17.5%] rounded-xl overflow-hidden shadow-[0_18px_40px_-20px_rgba(14,58,44,0.35)]">
-          <Image src="https://images.unsplash.com/photo-1542838384-cb9fc2cc508d?q=80&w=600" alt="" fill className="object-cover" />
+          <Image src="https://images.unsplash.com/photo-1607344645866-009c320b63e0?q=80&w=600" alt="" fill className="object-cover" />
         </div>
       </main>
 
       {/* Massive Bottom Text Section */}
       <div
         ref={bottomTextRef}
-        className="w-full relative h-[100vh] flex items-center justify-center bg-mint-50 px-14 mt-auto"
+        className="w-full relative h-[100vh] flex items-center justify-center px-14 mt-auto"
       >
         {/* Left/Right Text wrapper */}
         <div className="flex w-full justify-center items-center relative z-10 pointer-events-none">
-          <h1 className="left-text font-display font-normal text-[20vw] leading-[1] text-mint-900 uppercase whitespace-nowrap">
+          <h1 className="left-text text-forest font-display font-normal text-[20vw] leading-[1] text-mint-900 uppercase whitespace-nowrap">
             WRAP
           </h1>
-          <h1 className="right-text font-display font-normal text-[20vw] leading-[1] text-mint-600 uppercase whitespace-nowrap">
+          <h1 className="right-text text-forest font-display font-normal text-[20vw] leading-[1] text-mint-600 uppercase whitespace-nowrap">
             STYLE
           </h1>
         </div>
 
         {/* Middle Content */}
-        <div className="middle-content absolute inset-0 flex flex-col items-center justify-center text-center z-20 pointer-events-none px-14">
+        {/* <div className="middle-content absolute inset-0 flex flex-col items-center justify-center text-center z-20 pointer-events-none px-14">
           <p className="text-sm font-semibold mb-4 tracking-widest text-mint-700">(EST. 2014 — MUMBAI · LONDON)</p>
           <h2 className="font-display text-4xl sm:text-5xl lg:text-7xl font-normal uppercase max-w-4xl leading-[0.9] mb-10 tracking-tighter text-mint-900">
             BESPOKE GIFT WRAPPING<br />&amp; CORPORATE PACKAGING<br />FINISHED BY HAND
@@ -468,13 +521,13 @@ export default function Home() {
           <button className="border border-mint-900 bg-mint-900 text-mint-50 px-10 py-4 text-sm font-bold uppercase tracking-widest hover:bg-mint-50 hover:text-mint-900 transition-colors pointer-events-auto">
             Start a Commission
           </button>
-        </div>
+        </div> */}
       </div>
 
       {/* Video Reveal Section */}
       <section
         ref={videoSectionRef}
-        className="w-full h-[100vh] bg-mint-50 flex items-center justify-center overflow-hidden"
+        className="w-full h-[100vh] bg-background flex items-center justify-center overflow-hidden"
       >
         <div className="video-wrapper relative overflow-hidden shadow-2xl ring-1 ring-mint-200">
           <video
@@ -489,109 +542,230 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      <section
-        ref={servicesRef}
-        className="w-full bg-mint-50 px-14 py-28 lg:py-40"
-      >
-        <div className="services-heading w-full mx-auto mb-16 lg:mb-24">
-          <p className="text-xs font-semibold tracking-[0.3em] uppercase mb-5 text-mint-600">
-            (Our Services)
-          </p>
-          <h2 className="font-display text-5xl sm:text-6xl lg:text-8xl uppercase leading-[0.95] tracking-tighter max-w-5xl text-mint-900">
-            Wrapped with<br />intention, delivered<br />with craft.
-          </h2>
-          <p className="mt-8 max-w-xl text-base sm:text-lg text-mint-800/75 leading-relaxed">
-            From intimate gifts to large-scale corporate orders, every wrap is designed, sourced and finished by hand at our studio.
-          </p>
+      <ServicesSection/>
+
+      <RelationshipSection/>
+
+      <section className="w-full px-6 md:px-14 py-16">
+
+        {/* Header */}
+        <div className="flex items-start justify-between mb-10">
+          <div>
+            <h2 className="text-5xl font-medium tracking-wide text-forest uppercase">
+              Gift Hampers
+            </h2>
+            <a
+              href="#"
+              className="text-sm tracking-widest underline mt-4 inline-block text-sage"
+            >
+              VIEW ALL
+            </a>
+          </div>
         </div>
 
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
-          {[
-            {
-              num: "01",
-              title: "Luxury Gift Wrapping",
-              desc: "Bespoke finishes on single gifts — premium papers, hand-tied ribbons, wax seals.",
-              img: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=800&auto=format&fit=crop",
-            },
-            {
-              num: "02",
-              title: "Corporate Hampers",
-              desc: "Brand-aligned packaging at scale for client gifting and seasonal campaigns.",
-              img: "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop",
-            },
-            {
-              num: "03",
-              title: "Wedding & Events",
-              desc: "Coordinated suites — invitations, favors, guest gifts — tied to a single theme.",
-              img: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop",
-            },
-            {
-              num: "04",
-              title: "Retail Packaging",
-              desc: "Shelf-ready packaging design and production for boutique brands.",
-              img: "https://images.unsplash.com/photo-1607344645866-009c320b63e0?q=80&w=800&auto=format&fit=crop",
-            },
-            {
-              num: "05",
-              title: "Seasonal Collections",
-              desc: "Limited-edition wraps for holidays — Diwali, Christmas, Lunar New Year.",
-              img: "https://images.unsplash.com/photo-1544816155-82aea1b11d06?q=80&w=800&auto=format&fit=crop",
-            },
-            {
-              num: "06",
-              title: "Custom Commissions",
-              desc: "One-off packaging for launches, keepsakes, and editorial shoots.",
-              img: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=800&auto=format&fit=crop",
-            },
-          ].map((s) => (
-            <article
-              key={s.num}
-              className="service-card group relative overflow-hidden aspect-[4/5] bg-mint-100 cursor-pointer rounded-xl"
+        {/* Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+
+            {PRODUCTS.map((item, index) => (
+              <div
+                key={index}
+                className="group cursor-pointer transition-transform duration-300 hover:-translate-y-2"
+              >
+
+                {/* Square Image */}
+                <div className="relative w-full aspect-square overflow-hidden bg-[#f3efe9]">
+
+                  {/* Sale Badge */}
+                  {item.sale && (
+                    <div className="absolute top-3 left-3 z-10 text-[10px] px-2 py-1 border border-black bg-white">
+                      Sale
+                    </div>
+                  )}
+
+                  <Image
+                    src={item.img}
+                    alt={item.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 25vw"
+                    className="object-cover transition duration-700 group-hover:scale-105"
+                  />
+                </div>
+
+                {/* Info */}
+                <div className="text-center mt-4 space-y-1">
+                  <p className="text-[13px] tracking-wide uppercase text-forest">
+                    {item.name}
+                  </p>
+
+                  <div className="text-[13px] text-foreground">
+                    {item.oldPrice && (
+                      <span className="line-through opacity-50 mr-2">
+                        {item.oldPrice}
+                      </span>
+                    )}
+                    <span>{item.price}</span>
+                  </div>
+                </div>
+
+              </div>
+            ))}
+
+          </div>
+      </section>
+
+
+      <section className="w-full px-6 md:px-14 py-16">
+
+        {/* Header */}
+        <div className="flex items-start justify-between mb-10">
+          <div>
+            <h2 className="text-5xl font-medium tracking-wide text-forest uppercase">
+              Personalized & Custom Gift Hampers
+            </h2>
+            <a
+              href="#"
+              className="text-sm tracking-widest underline mt-3 inline-block text-sage"
             >
-              <Image
-                src={s.img}
-                alt={s.title}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-mint-900/85 via-mint-900/20 to-transparent" />
-              <div className="absolute top-5 left-5 text-mint-100/90 text-xs font-semibold tracking-widest">
-                {s.num}
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 p-6 lg:p-7 text-mint-50">
-                <h3 className="font-display text-2xl lg:text-3xl uppercase leading-tight tracking-tight mb-2">
-                  {s.title}
-                </h3>
-                <p className="text-sm opacity-0 translate-y-2 group-hover:opacity-95 group-hover:translate-y-0 transition-all duration-500 ease-out leading-relaxed">
-                  {s.desc}
-                </p>
-              </div>
-            </article>
-          ))}
+              VIEW ALL
+            </a>
+          </div>
         </div>
+
+        {/* Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+
+            {PRODUCTS_CUSTOM.map((item, index) => (
+              <div
+                key={index}
+                className="group cursor-pointer transition-transform duration-300 hover:-translate-y-2"
+              >
+
+                {/* Square Image */}
+                <div className="relative w-full aspect-square overflow-hidden bg-[#f3efe9]">
+
+                  {/* Sale Badge */}
+                  {item.sale && (
+                    <div className="absolute top-3 left-3 z-10 text-[10px] px-2 py-1 border border-black bg-white">
+                      Sale
+                    </div>
+                  )}
+
+                  <Image
+                    src={item.img}
+                    alt={item.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 25vw"
+                    className="object-cover transition duration-700 group-hover:scale-105"
+                  />
+                </div>
+
+                {/* Info */}
+                <div className="text-center mt-4 space-y-1">
+                  <p className="text-[13px] tracking-wide uppercase text-forest">
+                    {item.name}
+                  </p>
+
+                  <div className="text-[13px] text-foreground">
+                    {item.oldPrice && (
+                      <span className="line-through opacity-50 mr-2">
+                        {item.oldPrice}
+                      </span>
+                    )}
+                    <span>{item.price}</span>
+                  </div>
+                </div>
+
+              </div>
+            ))}
+
+          </div>
+      </section>
+
+      <section className="w-full  px-6 md:px-14 py-16">
+
+        {/* Header */}
+        <div className="flex items-start justify-between mb-10">
+          <div>
+            <h2 className="text-5xl font-medium tracking-wide text-forest uppercase">
+              Trousseau Packing Gift Hampers
+            </h2>
+            <a
+              href="#"
+              className="text-sm tracking-widest underline mt-3 inline-block text-sage"
+            >
+              VIEW ALL
+            </a>
+          </div>
+        </div>
+
+        {/* Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+
+            {PRODUCTS.map((item, index) => (
+              <div
+                key={index}
+                className="group cursor-pointer transition-transform duration-300 hover:-translate-y-2"
+              >
+
+                {/* Square Image */}
+                <div className="relative w-full aspect-square overflow-hidden bg-[#f3efe9]">
+
+                  {/* Sale Badge */}
+                  {item.sale && (
+                    <div className="absolute top-3 left-3 z-10 text-[10px] px-2 py-1 border border-black bg-white">
+                      Sale
+                    </div>
+                  )}
+
+                  <Image
+                    src={item.img}
+                    alt={item.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 25vw"
+                    className="object-cover transition duration-700 group-hover:scale-105"
+                  />
+                </div>
+
+                {/* Info */}
+                <div className="text-center mt-4 space-y-1">
+                  <p className="text-[13px] tracking-wide uppercase text-forest">
+                    {item.name}
+                  </p>
+
+                  <div className="text-[13px] text-foreground">
+                    {item.oldPrice && (
+                      <span className="line-through opacity-50 mr-2">
+                        {item.oldPrice}
+                      </span>
+                    )}
+                    <span>{item.price}</span>
+                  </div>
+                </div>
+
+              </div>
+            ))}
+
+          </div>
       </section>
 
       {/* Process Section — horizontal scroll pinned.
           overflow-x-hidden lives on the wrapper, NOT the pinned <section>, because
           a pinned element can't have overflow clipping on itself (breaks pin-spacer math). */}
-      <div className="w-full overflow-x-hidden">
+      <div className="min-h-screen w-full overflow-x-hidden">
         <section
           ref={processRef}
           className="relative w-full bg-mint-200 h-screen"
         >
           <div className="process-track h-full flex w-max items-center gap-8 lg:gap-10 pl-14 pr-[10vw] will-change-transform">
-            {/* Heading panel */}
             <div className="shrink-0 w-[80vw] sm:w-[55vw] lg:w-[40vw] max-w-[560px]">
-              <h2 className="font-sans text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.05] text-mint-900">
+              <h2 className="font-sans font-medium text-5xl tracking-tight leading-[1.05] text-forest">
                 The Wrapstyle<br />commission journey
               </h2>
-              <p className="mt-6 text-base sm:text-lg text-mint-800/80 leading-relaxed max-w-md">
+              <p className="mt-6 text-base sm:text-lg text-sage leading-relaxed max-w-md">
                 Every commission follows a crafted journey — from first sketch to the final hand-tied bow.
               </p>
             </div>
 
-            {/* Process cards */}
             {[
               {
                 num: "01",
@@ -632,13 +806,13 @@ export default function Home() {
             ].map((p) => (
               <article
                 key={p.num}
-                className="process-card shrink-0 w-[75vw] sm:w-[44vw] lg:w-[30vw] max-w-[420px] h-[70vh] max-h-[620px] bg-mint-50 rounded-2xl shadow-[0_18px_50px_-18px_rgba(14,58,44,0.25)] p-8 lg:p-10 flex flex-col"
+                className="bg-sage shrink-0 w-[75vw] sm:w-[44vw] lg:w-[30vw] max-w-[420px] h-[70vh] max-h-[620px] bg-mint-50 rounded-2xl shadow-[0_18px_50px_-18px_rgba(14,58,44,0.25)] p-8 lg:p-10 flex flex-col"
               >
                 <div className="flex items-baseline gap-4 mb-6">
-                  <span className="font-sans text-3xl lg:text-4xl font-bold text-mint-600">
+                  <span className="font-sans text-3xl lg:text-4xl font-medium text-mint-600">
                     {p.num}
                   </span>
-                  <h3 className="font-sans text-2xl lg:text-3xl font-bold tracking-tight text-mint-900">
+                  <h3 className="font-sans text-2xl lg:text-3xl font-semibold tracking-tight text-foreground">
                     {p.title}
                   </h3>
                 </div>
@@ -663,7 +837,7 @@ export default function Home() {
       </div>
 
       {/* Signature Collections Section — 4×2 product grid */}
-      <section
+      {/* <section
         ref={collectionsRef}
         className="w-full bg-mint-50 px-14 py-28 lg:py-40"
       >
@@ -747,101 +921,23 @@ export default function Home() {
             </article>
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* Why Choose Us Section */}
-      <section className="w-full bg-mint-50 px-14 py-24 lg:py-32">
-        <div className="w-full mx-auto flex flex-col lg:flex-row gap-10 lg:gap-16">
+      <CustomHamperSection/>
 
-          {/* Left Image */}
-          <div className="w-full lg:w-[40%] relative min-h-[50vh] lg:min-h-[85vh] rounded-xl overflow-hidden">
-            <Image
-              src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=1200&auto=format&fit=crop"
-              alt="Wrapstyle atelier"
-              fill
-              className="object-cover"
-            />
-          </div>
-
-          {/* Right Content */}
-          <div className="w-full lg:w-[60%] flex flex-col pt-4">
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-6 text-mint-600 font-sans">
-              (WHY WRAPSTYLE)
-            </p>
-            <h2 className="font-display text-5xl sm:text-6xl lg:text-[72px] uppercase leading-[1.1] mb-12 sm:mb-16 font-bold text-mint-900 border-none">
-              A STUDIO BUILT ON CRAFT, SUSTAINABILITY AND THE QUIET LUXURY OF A BEAUTIFULLY WRAPPED GIFT.
-            </h2>
-
-            <div className="flex flex-col gap-6 w-full">
-              {/* Top Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-                {/* Card 1 */}
-                <div className="bg-mint-100 p-8 sm:p-10 relative flex flex-col justify-between min-h-[300px] rounded-xl">
-                  <h3 className="font-sans font-bold text-lg sm:text-xl uppercase tracking-tight relative z-10 w-3/4 text-mint-900">
-                    HAND-FINISHED, ALWAYS
-                  </h3>
-                  <div className="absolute top-4 right-6 font-sans font-bold text-[120px] sm:text-[140px] leading-[0.8] text-mint-50 select-none z-0">
-                    01
-                  </div>
-                  <p className="text-sm sm:text-base text-mint-800/75 leading-relaxed max-w-[260px] relative z-10 mt-16 font-sans">
-                    Every fold, ribbon and seal is finished by a real pair of hands — never machine-pressed, never rushed.
-                  </p>
-                </div>
-
-                {/* Card 2 */}
-                <div className="bg-mint-100 p-8 sm:p-10 relative flex flex-col justify-between min-h-[300px] rounded-xl">
-                  <h3 className="font-sans font-bold text-lg sm:text-xl uppercase tracking-tight relative z-10 w-[85%] text-mint-900">
-                    SUSTAINABLE BY DEFAULT
-                  </h3>
-                  <div className="absolute top-4 right-6 font-sans font-bold text-[120px] sm:text-[140px] leading-[0.8] text-mint-50 select-none z-0">
-                    02
-                  </div>
-                  <p className="text-sm sm:text-base text-mint-800/75 leading-relaxed max-w-[260px] relative z-10 mt-16 font-sans">
-                    FSC-certified papers, recycled fillers and natural fibre ribbons are our baseline — beautiful and responsible.
-                  </p>
-                </div>
-              </div>
-
-              {/* Bottom Full Width Card */}
-              <div className="bg-mint-100 p-8 sm:p-10 flex flex-col lg:flex-row gap-8 justify-between relative min-h-[320px] rounded-xl">
-                <div className="flex flex-col justify-between flex-1">
-                  <h3 className="font-sans font-bold text-lg sm:text-xl uppercase tracking-tight text-mint-900 max-w-[220px]">
-                    BUILT FOR BRANDS &amp; PEOPLE
-                  </h3>
-                  <p className="text-sm sm:text-base text-mint-800/75 leading-relaxed max-w-[320px] mt-12 lg:mt-0 font-sans">
-                    From a single anniversary gift to thousands of corporate hampers — the same studio, the same standard.
-                  </p>
-                </div>
-                <div className="w-full lg:w-[50%] xl:w-[55%] relative min-h-[240px] lg:min-h-0 rounded-lg overflow-hidden">
-                  <Image
-                    src="https://images.unsplash.com/photo-1607344645866-009c320b63e0?q=80&w=800&auto=format&fit=crop"
-                    alt="Wrapstyle corporate hampers"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Testimonials Section */}
-      <section className="w-full bg-mint-200 px-14 py-24 lg:py-32">
+      <section className="w-full px-14 py-24 lg:py-32">
         <div className="w-full mx-auto flex flex-col">
 
-          {/* Header */}
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 gap-8">
             <div>
-              <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4 text-mint-700 font-sans">
-                (CLIENT NOTES)
-              </p>
-              <h2 className="font-display text-5xl sm:text-6xl lg:text-[72px] uppercase leading-[1.1] font-bold text-mint-900 max-w-3xl">
+              <h2 className="font-display font-medium text-5xl uppercase leading-[1.1] text-forest max-w-3xl">
                 KIND WORDS FROM<br />OUR CLIENTS
               </h2>
             </div>
 
-            {/* Arrows */}
             <div className="flex gap-4 pb-2">
               <button className="w-12 h-12 flex items-center justify-center bg-mint-50 hover:bg-mint-100 transition-colors rounded-full" aria-label="Previous testimonial">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0e3a2c" strokeWidth="1.5" strokeLinecap="square">
@@ -856,11 +952,9 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-            {/* Card 1 */}
             <div className="bg-mint-50 p-8 sm:p-12 lg:p-14 flex flex-col justify-between min-h-[380px] shadow-sm rounded-xl">
-              <p className="font-sans font-bold text-xl sm:text-2xl lg:text-[26px] uppercase leading-[1.3] tracking-tight text-mint-900">
+              <p className="font-sans font-semibold text-xl sm:text-2xl lg:text-[26px] uppercase leading-[1.3] tracking-tight text-foreground">
                 &ldquo;WRAPSTYLE TURNED OUR DIWALI HAMPERS INTO THE MOMENT EVERY CLIENT TALKED ABOUT — FAULTLESS DETAIL, ON BRAND, ON TIME.&rdquo;
               </p>
 
@@ -879,9 +973,8 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Card 2 */}
             <div className="bg-mint-50 p-8 sm:p-12 lg:p-14 flex flex-col justify-between min-h-[380px] shadow-sm rounded-xl">
-              <p className="font-sans font-bold text-xl sm:text-2xl lg:text-[26px] uppercase leading-[1.3] tracking-tight text-mint-900">
+              <p className="font-sans font-semibold text-xl sm:text-2xl lg:text-[26px] uppercase leading-[1.3] tracking-tight text-foreground">
                 &ldquo;THE WEDDING SUITE THEY BUILT FOR US — INVITES, FAVORS, GUEST GIFTS — FELT LIKE A SINGLE PIECE OF ART.&rdquo;
               </p>
 
@@ -905,20 +998,15 @@ export default function Home() {
       </section>
 
       {/* FAQ Section */}
-      <section className="w-full bg-mint-50 px-14 py-24 lg:py-32 border-t border-mint-200">
+      <section className="w-full  px-14 py-24 lg:py-32 border-t border-mint-200">
         <div className="w-full mx-auto flex flex-col lg:flex-row gap-12 lg:gap-24">
 
-          {/* Left: Title */}
           <div className="w-full lg:w-[40%] flex flex-col">
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-6 text-mint-600 font-sans">
-              (FAQ)
-            </p>
-            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-[72px] uppercase leading-[1.1] font-bold text-mint-900 max-w-sm">
+            <h2 className="font-display text-5xl font-medium uppercase leading-[1.1] text-forest max-w-sm">
               FREQUENTLY ASKED QUESTIONS
             </h2>
           </div>
 
-          {/* Right: Accordion */}
           <div className="w-full lg:w-[60%] flex flex-col">
             {faqData.map((faq, idx) => (
               <div key={idx} className="border-b border-mint-300/60 group">
@@ -926,7 +1014,7 @@ export default function Home() {
                   onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
                   className="w-full py-8 flex items-center justify-between text-left focus:outline-none"
                 >
-                  <span className="font-sans font-bold text-lg sm:text-xl uppercase tracking-wider text-mint-900 max-w-[85%] pr-4">
+                  <span className="font-sans font-semibold text-lg sm:text-xl uppercase tracking-wider text-foreground max-w-[85%] pr-4">
                     {faq.question}
                   </span>
                   <div className="relative w-6 h-6 shrink-0 flex items-center justify-center">
@@ -938,7 +1026,7 @@ export default function Home() {
                   className={`grid transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${openFaq === idx ? 'grid-rows-[1fr] opacity-100 mb-8' : 'grid-rows-[0fr] opacity-0'}`}
                 >
                   <div className="overflow-hidden">
-                    <p className="text-base sm:text-lg text-mint-800/80 leading-relaxed font-sans max-w-2xl pr-4">
+                    <p className="text-base sm:text-lg text-forest/80 leading-relaxed font-sans max-w-2xl pr-4">
                       {faq.answer}
                     </p>
                   </div>
@@ -951,17 +1039,15 @@ export default function Home() {
       </section>
 
       {/* Footer Section */}
-      <footer className="w-full bg-mint-900 text-mint-50 pt-24 lg:pt-32 pb-12 px-14 flex flex-col">
+      <footer className="w-full text-mint-50 pt-24 lg:pt-32 pb-12 px-14 flex flex-col">
         <div className="w-full mx-auto w-full flex flex-col gap-16 lg:gap-32">
 
-          {/* Top Row: Newsletter & Links */}
           <div className="flex flex-col lg:flex-row justify-between items-start gap-16 w-full">
-            {/* Newsletter */}
             <div className="flex flex-col max-w-md w-full">
-              <h3 className="font-sans font-bold text-xl sm:text-2xl uppercase tracking-widest mb-4">
+              <h3 className="font-sans font-semibold text-xl sm:text-2xl uppercase tracking-widest mb-4 text-forest">
                 Join our newsletter
               </h3>
-              <p className="text-sm text-mint-200/80 mb-8 font-sans leading-relaxed">
+              <p className="text-sm text-forest/80 mb-8 font-sans leading-relaxed">
                 Seasonal drops, behind-the-scenes from the atelier, and early access to limited collections — once a month, never more.
               </p>
               <form className="flex border-b border-mint-200/30 pb-3 relative w-full group">
@@ -979,43 +1065,43 @@ export default function Home() {
               </form>
             </div>
 
-            {/* Navigation & Socials */}
             <div className="flex flex-col sm:flex-row gap-12 sm:gap-16 lg:gap-24 w-full lg:w-auto lg:justify-end">
               <div className="flex flex-col gap-4">
-                <span className="text-xs font-semibold tracking-[0.2em] uppercase text-mint-300/70 mb-2">Explore</span>
-                <a href="#" className="font-sans text-sm uppercase tracking-widest hover:text-mint-300 transition-colors">Home</a>
-                <a href="#" className="font-sans text-sm uppercase tracking-widest hover:text-mint-300 transition-colors">About Us</a>
-                <a href="#" className="font-sans text-sm uppercase tracking-widest hover:text-mint-300 transition-colors">Services</a>
-                <a href="#" className="font-sans text-sm uppercase tracking-widest hover:text-mint-300 transition-colors">Collections</a>
+                <span className="text-xs font-semibold tracking-[0.2em] uppercase text-forest mb-2">Explore</span>
+                <a href="#" className="font-sans text-sm uppercase tracking-widest text-foreground/80 hover:text-foreground transition-colors">Home</a>
+                <a href="#" className="font-sans text-sm uppercase tracking-widest text-foreground/80 hover:text-foreground transition-colors">About Us</a>
+                <a href="#" className="font-sans text-sm uppercase tracking-widest text-foreground/80 hover:text-foreground transition-colors">Services</a>
+                <a href="#" className="font-sans text-sm uppercase tracking-widest text-foreground/80  transition-colors">Collections</a>
               </div>
               <div className="flex flex-col gap-4">
-                <span className="text-xs font-semibold tracking-[0.2em] uppercase text-mint-300/70 mb-2">Socials</span>
-                <a href="#" className="font-sans text-sm uppercase tracking-widest hover:text-mint-300 transition-colors">Instagram</a>
-                <a href="#" className="font-sans text-sm uppercase tracking-widest hover:text-mint-300 transition-colors">Twitter</a>
-                <a href="#" className="font-sans text-sm uppercase tracking-widest hover:text-mint-300 transition-colors">LinkedIn</a>
-                <a href="#" className="font-sans text-sm uppercase tracking-widest hover:text-mint-300 transition-colors">Pinterest</a>
+                <span className="text-xs font-semibold tracking-[0.2em] uppercase text-forest mb-2">Socials</span>
+                <a href="#" className="font-sans text-sm uppercase tracking-widest text-foreground/80 hover:text-foreground transition-colors">Instagram</a>
+                <a href="#" className="font-sans text-sm uppercase tracking-widest text-foreground/80 hover:text-foreground transition-colors">Twitter</a>
+                <a href="#" className="font-sans text-sm uppercase tracking-widest text-foreground/80 hover:text-foreground transition-colors">LinkedIn</a>
+                <a href="#" className="font-sans text-sm uppercase tracking-widest text-foreground/80 hover:text-foreground transition-colors">Pinterest</a>
               </div>
               <div className="flex flex-col gap-4">
-                <span className="text-xs font-semibold tracking-[0.2em] uppercase text-mint-300/70 mb-2">Contact</span>
-                <a href="mailto:HELLO@WRAPSTYLE.CO" className="font-sans text-sm uppercase tracking-widest hover:text-mint-300 transition-colors">HELLO@WRAPSTYLE.CO</a>
-                <a href="tel:+919821550199" className="font-sans text-sm uppercase tracking-widest hover:text-mint-300 transition-colors">+91 98215 50199</a>
-                <p className="font-sans text-sm uppercase tracking-widest text-mint-200/70 mt-2 max-w-[220px] leading-relaxed">
+                <span className="text-xs font-semibold tracking-[0.2em] uppercase text-forest mb-2">Contact</span>
+                <a href="mailto:HELLO@WRAPSTYLE.CO" className="font-sans text-sm uppercase tracking-widest text-foreground/80 hover:text-foreground transition-colors">HELLO@WRAPSTYLE.CO</a>
+                <a href="tel:+919821550199" className="font-sans text-sm uppercase tracking-widest text-foreground/80 hover:text-foreground transition-colors">+91 98215 50199</a>
+                <p className="font-sans text-sm uppercase tracking-widest text-foreground/80 hover:text-foreground mt-2 max-w-[220px] leading-relaxed">
                   ATELIER 14, BANDRA WEST<br />MUMBAI, IN 400050
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Bottom Row: Giant Wordmark */}
           <div className="flex flex-col mt-auto w-full pt-10 border-t border-mint-200/20">
-            <h1 className="font-display font-bold text-[18vw] lg:text-[16vw] leading-[1.1] uppercase w-full text-center select-none text-mint-50/95">
-              WRAPSTYLE
-            </h1>
-            <div className="flex flex-col sm:flex-row justify-between items-center w-full mt-10 gap-6 text-[10px] sm:text-xs font-sans uppercase tracking-[0.2em] text-mint-300/70">
+            <div className="w-full flex items-center justify-center">
+              <h1 className="font-display font-normal text-[18vw] lg:text-[16vw] leading-[1.1] uppercase text-sage">
+                WRAPSTYLE
+              </h1>
+            </div>
+            <div className="flex flex-col sm:flex-row justify-between items-center w-full mt-10 gap-6 text-[10px] sm:text-xs font-sans uppercase tracking-[0.2em] text-sage">
               <p>&copy; {new Date().getFullYear()} WRAPSTYLE STUDIO. ALL RIGHTS RESERVED.</p>
               <div className="flex gap-6">
-                <a href="#" className="hover:text-mint-50 transition-colors">Privacy Policy</a>
-                <a href="#" className="hover:text-mint-50 transition-colors">Terms of Service</a>
+                <a href="#" className="text-sage transition-colors">Privacy Policy</a>
+                <a href="#" className="text-sage transition-colors">Terms of Service</a>
               </div>
             </div>
           </div>

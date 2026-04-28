@@ -7,6 +7,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ServicesSection from "@/components/Services";
 import RelationshipSection from "@/components/RelationshipSection";
 import CustomHamperSection from "@/components/CustomHamperSection";
+import TestimonialSection2 from "@/components/testimonial2";
+import HeroSection from "../components/HeroSection";
+import "./hero.css";
+import BenefitSection from "@/components/BenefitSection";
 
 type MegaColumn = { heading: string; links: string[] };
 type NavItem = { label: string; columns: MegaColumn[] };
@@ -155,11 +159,32 @@ const PRODUCTS_CUSTOM = [
   },
 ];
 
+const giftingBenefits = [
+  {
+    title: "CURATED COLLECTIONS",
+    className: "bg-[#f2ebe2] text-forest border-[#2f4a40] rotate-[3deg] relative z-10",
+  },
+  {
+    title: "PERSONAL + MEANINGFUL",
+    className: "bg-forest text-ivory border-[#f2ebe2] -rotate-[1deg] md:-translate-y-5",
+  },
+  {
+    title: "LUXURY PRESENTATION",
+    className: "bg-[#d4e0d7] text-forest border-[#2f4a40] rotate-[1deg] md:-translate-y-12 relative z-10",
+  },
+  {
+    title: "DESIGNED TO IMPRESS",
+    className: "bg-[#9fb7a7] text-[#21372f] border-[#f2ebe2] -rotate-[5deg] md:-translate-y-12",
+  },
+];
+
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [openMenu, setOpenMenu] = useState<number | null>(null);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [isNavSticky, setIsNavSticky] = useState(false);
   const navCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleMenuEnter = (idx: number) => {
@@ -174,133 +199,42 @@ export default function Home() {
     navCloseTimer.current = setTimeout(() => setOpenMenu(null), 120);
   };
 
-  const heroRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
-  const bottomTextRef = useRef<HTMLDivElement>(null);
-  const videoSectionRef = useRef<HTMLDivElement>(null);
-  const servicesRef = useRef<HTMLElement>(null);
+  const benefitRef = useRef<HTMLElement>(null);
   const processRef = useRef<HTMLElement>(null);
   const collectionsRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    let ctx = gsap.context(() => { }, rootRef); // initialized empty context to satisfy TS with proper scope
+    const ctx = gsap.context(() => { }, rootRef); // initialized empty context to satisfy TS with proper scope
     const timeout = setTimeout(() => {
       ctx.add(() => {
-        const downCards = gsap.utils.toArray(".down-card");
-        const upCards = gsap.utils.toArray(".up-card");
-
-        gsap.set([".down-card", ".up-card"], {
-          y: 0,
-          clearProps: "transform",
-        });
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: heroRef.current,
-            start: "top top",
-            end: "+=400",
-            scrub: 1.2,
-            invalidateOnRefresh: true,
-          },
-        });
-
-        tl.to(downCards, { y: 500, ease: "none" }, 0);
-        tl.to(upCards, { y: -500, ease: "none" }, 0);
-
-        const leftText = gsap.utils.toArray(".left-text");
-        const rightText = gsap.utils.toArray(".right-text");
-        const middleContent = gsap.utils.toArray(".middle-content");
-
-        gsap.set(middleContent, { autoAlpha: 0, scale: 0.85, y: 20 });
-
-        const bottomTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: bottomTextRef.current,
-            start: "top top",
-            end: "+=1200",
-            scrub: 1,
-            pin: true,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-          },
-        });
-
-        bottomTl
-          .to(leftText, { x: "-70vw", ease: "none" }, 0)
-          .to(rightText, { x: "70vw", ease: "none" }, 0)
-          .to(middleContent, { autoAlpha: 1, scale: 1, y: 0, ease: "power2.out" }, 0.2)
-          .to(leftText, { autoAlpha: 0, ease: "power1.in" }, 0.5)
-          .to(rightText, { autoAlpha: 0, ease: "power1.in" }, 0.5);
-
-        // Video reveal — starts small/rounded, expands to fill viewport as user scrolls
-        const videoWrapper = videoSectionRef.current?.querySelector(".video-wrapper");
-        if (videoWrapper) {
-          const videoTl = gsap.timeline({
-            scrollTrigger: {
-              trigger: videoSectionRef.current,
-              start: "top bottom",
-              end: "top top",
-              scrub: 1,
-              invalidateOnRefresh: true,
-            },
-          });
-
-          // CTA fades out alongside the video growing to fullscreen.
-          // immediateRender: false prevents this tween from snapping CTA to 0 on page load —
-          // it waits for the scroll trigger to actually advance before applying values.
-          videoTl.to(
-            middleContent,
-            { autoAlpha: 0, ease: "power1.in", immediateRender: false },
-            0
-          );
-
-          videoTl.fromTo(
-            videoWrapper,
-            { width: "40vw", height: "50vh", borderRadius: "24px" },
-            {
-              width: "100vw",
-              height: "100vh",
-              borderRadius: "0px",
-              ease: "none",
-            },
-            0
-          );
-        }
 
         // Services — heading reveal + staggered card rise
-        const servicesHeading = servicesRef.current?.querySelectorAll(".services-heading > *");
-        if (servicesHeading && servicesHeading.length) {
-          gsap.from(servicesHeading, {
-            y: 60,
-            autoAlpha: 0,
-            duration: 0.9,
-            ease: "power3.out",
-            stagger: 0.12,
-            scrollTrigger: {
-              trigger: servicesRef.current,
-              start: "top 75%",
-              once: true,
-            },
-          });
-        }
-
-        const serviceCards = servicesRef.current?.querySelectorAll(".service-card");
-        if (serviceCards && serviceCards.length) {
-          gsap.from(serviceCards, {
-            y: 80,
-            autoAlpha: 0,
-            duration: 1,
-            ease: "power3.out",
-            stagger: 0.15,
-            scrollTrigger: {
-              trigger: servicesRef.current,
-              start: "top 60%",
-              once: true,
-            },
-          });
-        }
-
         // Process — horizontal scroll pinned section
+        if (benefitRef.current) {
+          const benefitTitles = benefitRef.current.querySelectorAll(".benefit-title");
+
+          if (benefitTitles.length) {
+            const revealTl = gsap.timeline({
+              scrollTrigger: {
+                trigger: benefitRef.current,
+                start: "top 60%",
+                end: "top top",
+                scrub: 1.5,
+              },
+            });
+
+            benefitTitles.forEach((title) => {
+              revealTl.to(title, {
+                duration: 1,
+                opacity: 1,
+                clipPath: "polygon(0% 0%, 100% 0, 100% 100%, 0% 100%)",
+                ease: "circ.out",
+              });
+            });
+          }
+        }
+
         const processTrack = processRef.current?.querySelector(".process-track") as HTMLElement | null;
         if (processRef.current && processTrack) {
           // Fixed horizontal distance sized off viewport — simple and robust.
@@ -369,21 +303,64 @@ export default function Home() {
     };
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsNavSticky(window.scrollY > 24);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!mobileNavOpen) {
+      return;
+    }
+
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setMobileNavOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [mobileNavOpen]);
+
   return (
     <div ref={rootRef} className="flex flex-col flex-1 bg-background font-sans text-mint-900 relative overflow-x-hidden">
       {/* Navbar with mega menu */}
-      <header className="relative z-50" onMouseLeave={handleMenuLeave}>
-        <nav className="bg-forest flex justify-between items-center py-7 px-14 text-sm font-semibold tracking-wider">
+      <header
+        className={`z-50 transition-all duration-300 ${
+          isNavSticky
+            ? "fixed inset-x-0 top-0"
+            : "relative"
+        }`}
+        onMouseLeave={handleMenuLeave}
+      >
+        <nav
+          className={`flex justify-between items-center px-4 py-3 md:px-8 lg:px-14 text-sm font-semibold tracking-wider transition-all duration-300 ${
+            isNavSticky
+              ? "bg-forest/95 shadow-[0_18px_45px_-24px_rgba(14,58,44,0.45)] backdrop-blur"
+              : "bg-forest"
+          }`}
+        >
           {/* Logo */}
-          <div className="flex items-center gap-3 shrink-0">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L12 22M2 12L22 12M6 6L18 18M18 6L6 18" stroke="#F8F7F4" strokeWidth="2.5" strokeLinecap="square" />
-            </svg>
-            <span className="text-xl font-semibold tracking-tight uppercase text-ivory">WRAPSTYLE</span>
+          <div className="relative flex items-center gap-3 shrink-0">
+            <Image
+              src="/logo.png"
+              alt="Wrapstyle logo"
+              width={1536}
+              height={924}
+              className="relative z-10 block h-14 w-36 max-w-none drop-shadow-[0_16px_28px_rgba(0,0,0,0.3)] md:h-20 md:w-48 lg:h-[96px] lg:w-56"
+              priority
+            />
           </div>
 
           {/* Primary nav links */}
-          <ul className="flex items-center gap-8 xl:gap-10 font-medium tracking-[0.12em] text-[11px] uppercase text-mint-800">
+          <ul className="hidden lg:flex items-center gap-7 xl:gap-8 font-medium tracking-[0.12em] text-[10px] uppercase text-mint-800">
             {navData.map((item, idx) => {
               const active = openMenu === idx;
               return (
@@ -407,7 +384,7 @@ export default function Home() {
           </ul>
 
           {/* Right icons */}
-          <div className="flex items-center gap-6 text-mint-800 shrink-0">
+          <div className="flex items-center gap-3 md:gap-5 text-mint-800 shrink-0">
             <button aria-label="Account" className="hover:text-mint-600 transition-colors">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F8F7F4" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="8" r="4" />
@@ -426,13 +403,35 @@ export default function Home() {
                 <path d="M9 7V5a3 3 0 0 1 6 0v2" />
               </svg>
             </button>
+            <button
+              aria-label={mobileNavOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileNavOpen}
+              onClick={() => setMobileNavOpen((open) => !open)}
+              className="flex lg:hidden h-10 w-10 items-center justify-center rounded-full border border-ivory/25 text-ivory transition-colors hover:bg-ivory/10"
+            >
+              <span className="sr-only">Menu</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F8F7F4" strokeWidth="1.8" strokeLinecap="round">
+                {mobileNavOpen ? (
+                  <>
+                    <path d="M6 6 18 18" />
+                    <path d="M18 6 6 18" />
+                  </>
+                ) : (
+                  <>
+                    <path d="M4 7h16" />
+                    <path d="M4 12h16" />
+                    <path d="M4 17h16" />
+                  </>
+                )}
+              </svg>
+            </button>
           </div>
         </nav>
 
         {/* Mega menu panel */}
         <div
           onMouseEnter={() => openMenu !== null && handleMenuEnter(openMenu)}
-          className={`absolute left-0 right-0 top-full bg-ivory border-t border-mint-200/70 shadow-[0_24px_40px_-24px_rgba(14,58,44,0.25)] transition-all duration-300 ease-out ${
+          className={`absolute left-0 right-0 top-full hidden lg:block bg-ivory border-t border-mint-200/70 shadow-[0_24px_40px_-24px_rgba(14,58,44,0.25)] transition-all duration-300 ease-out ${
             openMenu !== null ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-2 pointer-events-none"
           }`}
         >
@@ -456,90 +455,37 @@ export default function Home() {
                     ))}
                   </ul>
                 </div>
+            ))}
+          </div>
+        </div>
+
+        <div
+          className={`lg:hidden overflow-hidden border-t border-ivory/15 bg-forest/95 backdrop-blur transition-[max-height,opacity] duration-300 ${
+            mobileNavOpen ? "max-h-[70vh] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
+          <div className="px-4 pb-5 pt-3 md:px-8">
+            <ul className="flex flex-col divide-y divide-ivory/10">
+              {navData.map((item) => (
+                <li key={item.label}>
+                  <a
+                    href="#"
+                    onClick={() => setMobileNavOpen(false)}
+                    className="flex items-center justify-between py-4 text-sm font-medium tracking-[0.16em] uppercase text-ivory"
+                  >
+                    <span>{item.label}</span>
+                    <span className="text-ivory/55">+</span>
+                  </a>
+                </li>
               ))}
+            </ul>
           </div>
         </div>
       </header>
 
-      {/* Floating Gallery Area — matches hero horizontal padding */}
-      <main
-        ref={heroRef}
-        className="flex-1 relative w-full mt-10 min-h-[55vh] px-14"
-      >
-        {/* DOWN (Top 4 Cards) - evenly spaced across the row */}
-        <div className="down-card absolute w-[11vw] h-[14vw] top-[6%] left-[6%] rounded-xl overflow-hidden shadow-[0_18px_40px_-20px_rgba(14,58,44,0.35)]">
-          <Image src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=600" alt="" fill className="object-cover" />
-        </div>
-
-        <div className="down-card absolute w-[11vw] h-[14vw] top-[6%] left-[29%] rounded-xl overflow-hidden shadow-[0_18px_40px_-20px_rgba(14,58,44,0.35)]">
-          <Image src="https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=600" alt="" fill className="object-cover" />
-        </div>
-
-        <div className="down-card absolute w-[11vw] h-[14vw] top-[6%] right-[29%] rounded-xl overflow-hidden shadow-[0_18px_40px_-20px_rgba(14,58,44,0.35)]">
-          <Image src="https://images.unsplash.com/photo-1607344645866-009c320b63e0?q=80&w=600" alt="" fill className="object-cover" />
-        </div>
-
-        <div className="down-card absolute w-[11vw] h-[14vw] top-[6%] right-[6%] rounded-xl overflow-hidden shadow-[0_18px_40px_-20px_rgba(14,58,44,0.35)]">
-          <Image src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=600" alt="" fill className="object-cover" />
-        </div>
-
-        {/* UP (Bottom 3 Cards) - offset between the top cards */}
-        <div className="up-card absolute w-[11vw] h-[14vw] top-[46%] left-[17.5%] rounded-xl overflow-hidden shadow-[0_18px_40px_-20px_rgba(14,58,44,0.35)]">
-          <Image src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=600" alt="" fill className="object-cover" />
-        </div>
-
-        <div className="up-card absolute w-[11vw] h-[14vw] top-[46%] left-[44.5%] rounded-xl overflow-hidden shadow-[0_18px_40px_-20px_rgba(14,58,44,0.35)]">
-          <Image src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600" alt="" fill className="object-cover" />
-        </div>
-
-        <div className="up-card absolute w-[11vw] h-[14vw] top-[46%] right-[17.5%] rounded-xl overflow-hidden shadow-[0_18px_40px_-20px_rgba(14,58,44,0.35)]">
-          <Image src="https://images.unsplash.com/photo-1607344645866-009c320b63e0?q=80&w=600" alt="" fill className="object-cover" />
-        </div>
-      </main>
-
-      {/* Massive Bottom Text Section */}
-      <div
-        ref={bottomTextRef}
-        className="w-full relative h-[100vh] flex items-center justify-center px-14 mt-auto"
-      >
-        {/* Left/Right Text wrapper */}
-        <div className="flex w-full justify-center items-center relative z-10 pointer-events-none">
-          <h1 className="left-text text-forest font-display font-normal text-[20vw] leading-[1] text-mint-900 uppercase whitespace-nowrap">
-            WRAP
-          </h1>
-          <h1 className="right-text text-forest font-display font-normal text-[20vw] leading-[1] text-mint-600 uppercase whitespace-nowrap">
-            STYLE
-          </h1>
-        </div>
-
-        {/* Middle Content */}
-        {/* <div className="middle-content absolute inset-0 flex flex-col items-center justify-center text-center z-20 pointer-events-none px-14">
-          <p className="text-sm font-semibold mb-4 tracking-widest text-mint-700">(EST. 2014 — MUMBAI · LONDON)</p>
-          <h2 className="font-display text-4xl sm:text-5xl lg:text-7xl font-normal uppercase max-w-4xl leading-[0.9] mb-10 tracking-tighter text-mint-900">
-            BESPOKE GIFT WRAPPING<br />&amp; CORPORATE PACKAGING<br />FINISHED BY HAND
-          </h2>
-          <button className="border border-mint-900 bg-mint-900 text-mint-50 px-10 py-4 text-sm font-bold uppercase tracking-widest hover:bg-mint-50 hover:text-mint-900 transition-colors pointer-events-auto">
-            Start a Commission
-          </button>
-        </div> */}
-      </div>
-
-      {/* Video Reveal Section */}
-      <section
-        ref={videoSectionRef}
-        className="w-full h-[100vh] bg-background flex items-center justify-center overflow-hidden"
-      >
-        <div className="video-wrapper relative overflow-hidden shadow-2xl ring-1 ring-mint-200">
-          <video
-            src="/gift_wrapping.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        </div>
-      </section>
+      {/* ═══ NEW HERO — Mojito-inspired scroll-driven gift drop ═══ */}
+      {isNavSticky ? <div className="h-[124px]" aria-hidden="true" /> : null}
+      <HeroSection />
 
       {/* Services Section */}
       <ServicesSection/>
@@ -751,6 +697,41 @@ export default function Home() {
       {/* Process Section — horizontal scroll pinned.
           overflow-x-hidden lives on the wrapper, NOT the pinned <section>, because
           a pinned element can't have overflow clipping on itself (breaks pin-spacer math). */}
+      {/* <section
+        ref={benefitRef}
+        className="w-full overflow-hidden bg-[#2f3f38] px-6 py-20 md:px-14 lg:min-h-screen lg:py-24"
+      >
+        <div className="mx-auto flex max-w-[1500px] flex-col items-center">
+          <p className="max-w-[720px] text-center text-base leading-[1.15] text-[#f2ebe2] md:text-lg">
+            Elevate Every Celebration
+            <br />
+            With Signature Gifting Experiences
+          </p>
+
+          <div className="mt-16 flex w-full flex-col items-center md:mt-20">
+            {giftingBenefits.map((item) => (
+              <div
+                key={item.title}
+                className="w-full text-center [font-size:clamp(2.9rem,8.2vw,8.5rem)] font-bold uppercase leading-[0.88] tracking-[-0.05em]"
+              >
+                <div
+                  className={`benefit-title inline-block border-[0.5vw] opacity-0 ${item.className}`}
+                  style={{
+                    clipPath: "polygon(50% 0, 50% 0, 50% 100%, 50% 100%)",
+                  }}
+                >
+                  <div className="px-3 pb-5 pt-3 md:px-14 md:pb-5 md:pt-0">
+                    <h2>{item.title}</h2>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section> */}
+
+      <BenefitSection />
+
       <div className="min-h-screen w-full overflow-x-hidden">
         <section
           ref={processRef}
@@ -926,76 +907,8 @@ export default function Home() {
       {/* Why Choose Us Section */}
       <CustomHamperSection/>
 
-
-      {/* Testimonials Section */}
-      <section className="w-full px-14 py-24 lg:py-32">
-        <div className="w-full mx-auto flex flex-col">
-
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 gap-8">
-            <div>
-              <h2 className="font-display font-medium text-5xl uppercase leading-[1.1] text-forest max-w-3xl">
-                KIND WORDS FROM<br />OUR CLIENTS
-              </h2>
-            </div>
-
-            <div className="flex gap-4 pb-2">
-              <button className="w-12 h-12 flex items-center justify-center bg-mint-50 hover:bg-mint-100 transition-colors rounded-full" aria-label="Previous testimonial">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0e3a2c" strokeWidth="1.5" strokeLinecap="square">
-                  <path d="M19 12H5M5 12L12 19M5 12L12 5" />
-                </svg>
-              </button>
-              <button className="w-12 h-12 flex items-center justify-center bg-mint-50 hover:bg-mint-100 transition-colors rounded-full" aria-label="Next testimonial">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0e3a2c" strokeWidth="1.5" strokeLinecap="square">
-                  <path d="M5 12H19M19 12L12 19M19 12L12 5" />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-            <div className="bg-mint-50 p-8 sm:p-12 lg:p-14 flex flex-col justify-between min-h-[380px] shadow-sm rounded-xl">
-              <p className="font-sans font-semibold text-xl sm:text-2xl lg:text-[26px] uppercase leading-[1.3] tracking-tight text-foreground">
-                &ldquo;WRAPSTYLE TURNED OUR DIWALI HAMPERS INTO THE MOMENT EVERY CLIENT TALKED ABOUT — FAULTLESS DETAIL, ON BRAND, ON TIME.&rdquo;
-              </p>
-
-              <div className="flex items-center gap-5 mt-16">
-                <div className="w-[60px] h-[60px] relative rounded-full overflow-hidden shrink-0">
-                  <Image src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=200&auto=format&fit=crop" alt="Rosalina D. Williamson" fill className="object-cover" />
-                </div>
-                <div>
-                  <h4 className="font-sans font-bold text-[17px] uppercase tracking-tight text-mint-900 mb-1">
-                    ROSALINA D. WILLIAMSON
-                  </h4>
-                  <p className="text-xs uppercase tracking-widest text-mint-700/80">
-                    HEAD OF MARKETING, CYBERY
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-mint-50 p-8 sm:p-12 lg:p-14 flex flex-col justify-between min-h-[380px] shadow-sm rounded-xl">
-              <p className="font-sans font-semibold text-xl sm:text-2xl lg:text-[26px] uppercase leading-[1.3] tracking-tight text-foreground">
-                &ldquo;THE WEDDING SUITE THEY BUILT FOR US — INVITES, FAVORS, GUEST GIFTS — FELT LIKE A SINGLE PIECE OF ART.&rdquo;
-              </p>
-
-              <div className="flex items-center gap-5 mt-16">
-                <div className="w-[60px] h-[60px] relative rounded-full overflow-hidden shrink-0">
-                  <Image src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop" alt="Julianne J. Stam" fill className="object-cover" />
-                </div>
-                <div>
-                  <h4 className="font-sans font-bold text-[17px] uppercase tracking-tight text-mint-900 mb-1">
-                    JULIANNE J. STAM
-                  </h4>
-                  <p className="text-xs uppercase tracking-widest text-mint-700/80">
-                    BRIDE &amp; FOUNDER, MEZPAY
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
+      {/* <TestimonialSection /> */}
+      <TestimonialSection2 />
 
       {/* FAQ Section */}
       <section className="w-full  px-14 py-24 lg:py-32 border-t border-mint-200">
@@ -1039,7 +952,7 @@ export default function Home() {
       </section>
 
       {/* Footer Section */}
-      <footer className="w-full text-mint-50 pt-24 lg:pt-32 pb-12 px-14 flex flex-col">
+      <footer className="w-full text-mint-50 pt-24 lg:pt-32 pb-12 px-14 flex flex-col bg-[#9FB7A7]">
         <div className="w-full mx-auto w-full flex flex-col gap-16 lg:gap-32">
 
           <div className="flex flex-col lg:flex-row justify-between items-start gap-16 w-full">
@@ -1093,7 +1006,7 @@ export default function Home() {
 
           <div className="flex flex-col mt-auto w-full pt-10 border-t border-mint-200/20">
             <div className="w-full flex items-center justify-center">
-              <h1 className="font-display font-normal text-[18vw] lg:text-[16vw] leading-[1.1] uppercase text-sage">
+              <h1 className="font-display font-normal !text-[#3F5F52] text-[18vw] lg:text-[16vw] leading-[1.1] uppercase">
                 WRAPSTYLE
               </h1>
             </div>
@@ -1112,3 +1025,4 @@ export default function Home() {
     </div>
   );
 }
+

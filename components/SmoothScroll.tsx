@@ -13,7 +13,10 @@ export default function SmoothScroll({
     children: React.ReactNode;
 }) {
     useEffect(() => {
-        const lenis = new Lenis();
+        const lenis = new Lenis({
+            wheelMultiplier: 1.5, // Reduced from 4.5 for more natural feel
+            smoothWheel: true,
+        });
 
         lenis.on("scroll", ScrollTrigger.update);
 

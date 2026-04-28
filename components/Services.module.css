@@ -1,0 +1,247 @@
+.section {
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: #faeade;
+  isolation: isolate;
+  z-index: 2;
+}
+
+.pinStage {
+  position: relative;
+  min-height: 100dvh;
+  width: 100%;
+  background: #faeade;
+}
+
+.viewport {
+  position: relative;
+  min-height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.titleStack {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.introPanel {
+  display: flex;
+  width: min(42rem, 86vw);
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 1.5rem;
+  padding-block: 3rem;
+}
+
+.titleClip {
+  overflow: hidden;
+  padding: 0.25rem 0.5rem;
+  margin: -0.25rem -0.5rem;
+  white-space: nowrap;
+}
+
+.titleLine {
+  color: #9FB7A7;
+  font-family: var(--font-antonio), sans-serif;
+  font-size: clamp(2.2rem, 11vw, 7.2rem);
+  font-weight: 700;
+  letter-spacing: -0.08em;
+  line-height: 0.92;
+}
+
+.titleChar {
+  display: inline-block;
+}
+
+.accentWrap {
+  position: relative;
+  rotate: -3deg;
+  border: 0.5vw solid #faeade;
+  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+  will-change: clip-path, transform;
+}
+
+.accentInner {
+  background: #3F5F52;
+  padding: 0.45rem 0.75rem 0.9rem;
+}
+
+.accentText {
+  color: #faeade;
+  font-family: var(--font-antonio), sans-serif;
+  font-size: clamp(2.2rem, 11vw, 7.2rem);
+  font-weight: 700;
+  letter-spacing: -0.08em;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.flavors {
+  display: flex;
+  min-height: 100dvh;
+  width: max-content;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 4rem 1.5rem 3rem;
+}
+
+.card {
+  position: relative;
+  z-index: 30;
+  height: 20rem;
+  width: 24rem;
+  flex: none;
+  cursor: pointer;
+  overflow: visible;
+  padding-top: 2.25rem;
+}
+
+.cardBackground {
+  position: absolute;
+  inset-inline: 6%;
+  bottom: 0;
+  width: 88%;
+  transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.drink {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  z-index: 2;
+  height: 106%;
+  transform: translateX(-50%);
+  transform-origin: center bottom;
+  filter: drop-shadow(0 24px 30px rgba(34, 33, 35, 0.18));
+  transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.elements {
+  position: absolute;
+  bottom: 11%;
+  left: -5%;
+  z-index: 3;
+  width: 110%;
+  transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cardTitle {
+  position: absolute;
+  bottom: 1rem;
+  left: 2.2rem;
+  z-index: 4;
+  max-width: 72%;
+  color: #faeade;
+  font-family: var(--font-antonio), sans-serif;
+  font-size: 1.55rem;
+  font-weight: 600;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  text-align: left;
+  text-transform: uppercase;
+  transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card:hover .cardBackground {
+  transform: scale(0.98) translateY(1.5%);
+}
+
+.card:hover .drink {
+  transform: translateX(-50%) translateY(-6%) rotate(-3deg) scale(1.045);
+}
+
+.card:hover .elements {
+  transform: translateY(-8%) rotate(3deg) scale(1.04);
+}
+
+.card:hover .cardTitle {
+  transform: translateY(-10%);
+}
+
+@media (min-width: 768px) {
+  .accentWrap {
+    transform: translateY(0);
+  }
+
+  .accentInner {
+    padding: 0.5rem 1rem 1rem;
+  }
+
+  .introPanel {
+    width: min(40rem, 72vw);
+    padding-inline: 2rem;
+  }
+
+  .flavors {
+    flex-direction: row;
+    gap: 6rem;
+    padding: 5rem 2rem 4rem;
+  }
+
+  .card {
+    height: 50vh;
+    width: 90vw;
+    padding-top: 2.5rem;
+    transform: rotate(var(--card-rotation));
+  }
+
+  .drink {
+    bottom: 0;
+    height: 110%;
+  }
+
+  .elements {
+    top: auto;
+    bottom: 14%;
+  }
+
+  .cardTitle {
+    bottom: 2.2rem;
+    left: 4rem;
+    font-size: 2.85rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .introPanel {
+    min-height: 100dvh;
+    width: min(38rem, 34vw);
+    padding-left: clamp(2rem, 5vw, 5.5rem);
+    padding-right: 1rem;
+    padding-block: 0;
+  }
+
+  .flavors {
+    gap: 13rem;
+    will-change: transform;
+    padding: 0 5vw 0 0;
+  }
+
+  .card {
+    height: 84vh;
+    width: 50.4vw;
+    padding-top: 3.5rem;
+  }
+  
+  .cardTitle {
+    font-size: 3.4rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  .flavors {
+    gap: 18rem;
+  }
+}

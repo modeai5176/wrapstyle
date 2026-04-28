@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/Spylt-awward-clone-main
 /.pnp
 .pnp.*
 .yarn/*

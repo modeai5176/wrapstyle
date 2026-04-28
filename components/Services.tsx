@@ -1,229 +1,206 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import Image from "next/image";
+import type { CSSProperties } from "react";
+import { useRef } from "react";
+import { Antonio } from "next/font/google";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import styles from "./Services.module.css";
 
-// npm install gsap
+gsap.registerPlugin(ScrollTrigger);
 
-const LEFT_SERVICES = [
-  {
-    title: "Luxury Gift Wrapping",
-    img: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    title: "Wedding & Events",
-    img: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    title: "Seasonal Collections",
-    img: "https://images.unsplash.com/photo-1544816155-82aea1b11d06?q=80&w=800&auto=format&fit=crop",
-  },
+const antonio = Antonio({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-antonio",
+});
+
+const FLAVORS = [
+  { name: "Birthday Hampers", color: "brown", rotation: "-8deg" },
+  { name: "Wedding & Engagement", color: "red", rotation: "8deg" },
+  { name: "New Home", color: "blue", rotation: "-8deg" },
+  { name: "New Baby", color: "orange", rotation: "8deg" },
+  { name: "The Sweet Tooth", color: "white", rotation: "-8deg" },
+  { name: "The Wellness Edit", color: "black", rotation: "8deg" },
 ];
 
-const RIGHT_SERVICES = [
-  {
-    title: "Corporate Hampers",
-    img: "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    title: "Retail Packaging",
-    img: "https://images.unsplash.com/photo-1607344645866-009c320b63e0?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    title: "Custom Commissions",
-    img: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=800&auto=format&fit=crop",
-  },
-];
+function getCardStyle(rotation: string): CSSProperties {
+  return {
+    ["--card-rotation" as keyof CSSProperties]: rotation,
+  };
+}
 
-function ServiceCard({ title, img }: { title: string; img: string }) {
+function SplitChars({
+  text,
+  className,
+}: {
+  text: string;
+  className: string;
+}) {
   return (
-    <article className="group w-full flex-shrink-0 rounded-3xl overflow-hidden cursor-pointer"
-      style={{ background: "#f0ece3" }}
-    >
-      {/* Inset image */}
-      <div
-        className="relative overflow-hidden rounded-2xl"
-        style={{ margin: "0.65rem 0.65rem 0", aspectRatio: "1 / 1" }}
-      >
-        <Image
-          src={img}
-          alt={title}
-          fill
-          sizes="400px"
-          className="object-cover transition-transform duration-[1100ms] ease-out group-hover:scale-105"
-        />
-      </div>
-
-      {/* Info */}
-      <div className="px-6 py-5 text-center">
-        <h3
-          className="mb-4 text-forest"
-          style={{
-            // fontFamily: "'Cormorant Garamond', serif",
-            fontSize: "clamp(1.2rem, 1.8vw, 1.75rem)",
-            fontWeight: 400,
-            // color: "#2a2520",
-            letterSpacing: "-0.01em",
-          }}
-        >
-          {title}
-        </h3>
-        <button
-          className="px-9 py-2.5 text-forest bg-transparent border border-forest-dark hover:bg-forest hover:text-background rounded-full text-xs font-medium tracking-[0.2em] uppercase transition-all duration-300"
-        >
-          Shop Now
-        </button>
-      </div>
-    </article>
+    <h2 className={className} aria-label={text}>
+      {Array.from(text).map((char, index) => (
+        <span key={`${text}-${index}`} className={styles.titleChar} data-char>
+          {char === " " ? "\u00A0" : char}
+        </span>
+      ))}
+    </h2>
   );
 }
 
 export default function ServicesSection() {
-  const sectionRef  = useRef<HTMLElement>(null);
-  const colLeftRef  = useRef<HTMLDivElement>(null);
-  const colRightRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const pinStageRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const firstLineRef = useRef<HTMLDivElement>(null);
+  const accentRef = useRef<HTMLDivElement>(null);
+  const secondLineRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-  let ctx: any;
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+      const section = sectionRef.current;
+      const pinStage = pinStageRef.current;
+      const track = trackRef.current;
+      const firstLine = firstLineRef.current;
+      const accent = accentRef.current;
+      const secondLine = secondLineRef.current;
 
-  (async () => {
-    const gsap = (await import("gsap")).default;
-    const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-    gsap.registerPlugin(ScrollTrigger);
-
-    ctx = gsap.context(() => {
-      const section = sectionRef.current!;
-      const colLeft = colLeftRef.current!;
-      const colRight = colRightRef.current!;
-
-      function init() {
-        ScrollTrigger.getAll().forEach((t) => t.kill());
-
-        const vh = window.innerHeight;
-
-        const leftHeight = colLeft.scrollHeight;
-        const rightHeight = colRight.scrollHeight;
-        const maxTravel = Math.max(leftHeight, rightHeight);
-
-        // ✅ Initial hidden state
-        gsap.set([colLeft, colRight], {
-          y: vh * 1.2,
-          opacity: 0,
-        });
-
-        const tl = gsap.timeline({
-  scrollTrigger: {
-    trigger: section,
-    start: "top top",
-
-    // ✅ Better calibrated end (important)
-    end: () => `+=${maxTravel + window.innerHeight * 0.4}`,
-
-    scrub: 1, // 🔥 reduced from 1.2 (less lag = smoother)
-    pin: true,
-    pinSpacing: true,
-    anticipatePin: 1,
-
-    invalidateOnRefresh: true,
-    refreshPriority: 2,
-
-    // 🔥 Smooth release fix
-    fastScrollEnd: true,
-  },
-});
-
-        // 👉 Phase 1: Intro hold (text only)
-        tl.to({}, { duration: 0.6 });
-
-        // 👉 Phase 2: Cards enter (smoother)
-tl.to([colLeft, colRight], {
-  y: 0,
-  opacity: 1,
-  ease: "power3.out",
-  duration: 1,
-});
-
-// 👉 Phase 3: Main scroll (linear feel)
-tl.to([colLeft, colRight], {
-  y: `-=${maxTravel * 0.85}`, // 🔥 slightly less than full
-  ease: "none",
-  duration: 2,
-});
-
-// 👉 Phase 4: Smooth exit (THIS FIXES JUMP)
-tl.to([colLeft, colRight], {
-  y: `-=${maxTravel * 0.15}`, // remaining distance
-  ease: "power2.out", // 🔥 ease OUT instead of abrupt stop
-  duration: 0.6,
-});
-
-        // ❗ IMPORTANT: No extra timeline after this
-        // → ensures pin drops immediately
+      if (!section || !pinStage || !track || !firstLine || !accent || !secondLine) {
+        return;
       }
 
-      init();
-    }, sectionRef);
-  })();
+      const firstChars = firstLine.querySelectorAll("[data-char]");
+      const secondChars = secondLine.querySelectorAll("[data-char]");
+      const refreshScroll = () => ScrollTrigger.refresh();
+      const trackImages = Array.from(track.querySelectorAll("img"));
 
-  return () => ctx?.revert();
-}, []); 
+      trackImages.forEach((image) => {
+        if (!image.complete) {
+          image.addEventListener("load", refreshScroll, { once: true });
+        }
+      });
+
+      gsap.from(firstChars, {
+        yPercent: 200,
+        stagger: 0.02,
+        ease: "power1.inOut",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 30%",
+        },
+      });
+
+      gsap.to(accent, {
+        clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+        duration: 1,
+        ease: "power1.inOut",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 10%",
+        },
+      });
+
+      gsap.from(secondChars, {
+        yPercent: 200,
+        stagger: 0.02,
+        ease: "power1.inOut",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 1%",
+        },
+      });
+
+      mm.add("(min-width: 1025px)", () => {
+        const getScrollAmount = () =>
+          Math.max(0, track.scrollWidth - pinStage.clientWidth);
+
+        if (!getScrollAmount()) {
+          return;
+        }
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: section,
+            pin: pinStage,
+            start: "top top",
+            end: () => `+=${getScrollAmount() + window.innerWidth * 1.2}`,
+            scrub: true,
+            pinSpacing: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            refreshPriority: 2,
+          },
+        });
+
+        tl.to(track, {
+          x: () => -getScrollAmount(),
+          ease: "none",
+        }, 0);
+      });
+
+      requestAnimationFrame(refreshScroll);
+
+      return () => {
+        trackImages.forEach((image) => {
+          image.removeEventListener("load", refreshScroll);
+        });
+        mm.revert();
+      };
+    },
+    { scope: sectionRef }
+  );
 
   return (
-    <>
-      {/* Google Fonts — add this to your layout.tsx <head> instead */}
-      {/* <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap"
-        rel="stylesheet"
-      /> */}
+    <section ref={sectionRef} className={`${styles.section} ${antonio.variable}`}>
+      <div ref={pinStageRef} className={styles.pinStage}>
+        <div className={styles.viewport}>
+          <div ref={trackRef} className={styles.flavors}>
+            <div className={styles.introPanel}>
+              <div className={styles.titleStack}>
+              <div ref={firstLineRef} className={styles.titleClip}>
+                <SplitChars text="Discover 6" className={styles.titleLine} />
+              </div>
 
-      <section
-        ref={sectionRef}
-        className="relative w-full h-screen overflow-hidden bg-sage"
-      >
-        {/* ── PINNED CENTERED TITLE ── */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-[1] pointer-events-none px-8">
+              <div ref={accentRef} className={styles.accentWrap}>
+                <div className={styles.accentInner}>
+                  <h2 className={styles.accentText}>signature</h2>
+                </div>
+              </div>
 
-          <h2
-            className="uppercase text-forest"
-            style={{
-            //   fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "clamp(2.8rem, 6vw, 6.5rem)",
-              fontWeight: 400,
-              lineHeight: 0.96,
-              letterSpacing: "-0.02em",
-            }}
-          >
-            Wrapped with<br />intention, delivered<br />with craft.
-          </h2>
-        </div>
-
-        {/* ── TWO-COLUMN CARD LAYER ── */}
-        <div className="absolute inset-0 z-20 pointer-events-none">
-
-          {/* LEFT COLUMN — enters from bottom */}
-          <div
-            ref={colLeftRef}
-            className="absolute flex flex-col pointer-events-auto"
-            style={{ left: "14vw", top: 0, width: "clamp(260px, 28vw, 400px)", gap: "2rem" }}
-          >
-            {LEFT_SERVICES.map((s) => (
-              <ServiceCard key={s.title} {...s} />
+              <div ref={secondLineRef} className={styles.titleClip}>
+                <SplitChars text="gift collections" className={styles.titleLine} />
+              </div>
+              </div>
+            </div>
+            {FLAVORS.map((flavor) => (
+              <div
+                key={flavor.name}
+                className={styles.card}
+                style={getCardStyle(flavor.rotation)}
+              >
+                <img
+                  src={`/spylt/images/${flavor.color}-bg.svg`}
+                  alt=""
+                  className={styles.cardBackground}
+                />
+                <img
+                  src={`/spylt/images/${flavor.color}-gift.png`}
+                  alt=""
+                  className={styles.drink}
+                />
+                <img
+                  src={`/spylt/images/${flavor.color}-elements.png`}
+                  alt=""
+                  className={styles.elements}
+                />
+                <h3 className={styles.cardTitle}>{flavor.name}</h3>
+              </div>
             ))}
           </div>
-
-          {/* RIGHT COLUMN — starts partially above viewport */}
-          <div
-            ref={colRightRef}
-            className="absolute flex flex-col pointer-events-auto"
-            style={{ left: "57vw", top: 0, width: "clamp(260px, 28vw, 400px)", gap: "2rem" }}
-          >
-            {RIGHT_SERVICES.map((s) => (
-              <ServiceCard key={s.title} {...s} />
-            ))}
-          </div>
-
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

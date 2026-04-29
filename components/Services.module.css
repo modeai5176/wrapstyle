@@ -90,7 +90,7 @@
 .flavors {
   display: flex;
   min-height: 100dvh;
-  width: max-content;
+  width: 100%;
   flex-direction: column;
   align-items: center;
   gap: 2rem;
@@ -188,6 +188,7 @@
     flex-direction: row;
     gap: 6rem;
     padding: 5rem 2rem 4rem;
+    width: max-content;
   }
 
   .card {

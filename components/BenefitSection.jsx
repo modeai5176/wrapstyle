@@ -73,28 +73,28 @@ const BenefitSection = () => {
 
           <div className={`mt-20 ${styles.titles}`}>
             <ClipPathTitle
-              title={"Shelf stable"}
+              title={"THOUGHTFULLY CURATED"}
               color={"#F8F7F4"}
               bg={"#3F5F52"}
               className={styles.firstTitle}
               borderColor={"#F8F7F4"}
             />
             <ClipPathTitle
-              title={"Protein + Caffeine"}
+              title={"ELEGANT + TIMELESS"}
               color={"#2f4a40"}
               bg={"#F8F7F4"}
               className={styles.secondTitle}
               borderColor={"#F8F7F4"}
             />
             <ClipPathTitle
-              title={"Infinitely recyclable"}
+              title={"LUXURY PACKAGING"}
               color={"#F8F7F4"}
               bg={"#9FB7A7"}
               className={styles.thirdTitle}
               borderColor={"#F8F7F4"}
             />
             <ClipPathTitle
-              title={"Lactose free"}
+              title={"MADE TO DELIGHT"}
               color={"#2f4a40"}
               bg={"#dfe7e2"}
               className={styles.fourthTitle}

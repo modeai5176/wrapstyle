@@ -2,7 +2,7 @@ const ClipPathTitle = ({ title, color, bg, className, borderColor }) => {
   return (
     <div
       style={{
-        fontSize: "clamp(1.55rem, 9vw, 8.5rem)",
+        fontSize: "clamp(1.35rem, 7.8vw, 7.2rem)",
         fontWeight: 700,
         textTransform: "uppercase",
         lineHeight: 0.92,
